@@ -1,0 +1,22 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "ignorePaths": [
+    "**/target/**",
+    "**/.mvn/**",
+    "**/.git/**",
+    "**/node_modules/**"
+  ],
+  "words": [
+    "api-docs",
+    "audit_student_db",
+    "bcrypt",
+    "jjwt",
+    "jsonwebtoken",
+    "springdoc",
+    "springframework",
+    "swagger-ui",
+    "webjars",
+    "webmvc"
+  ]
+}
