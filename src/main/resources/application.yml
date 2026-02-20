@@ -1,0 +1,59 @@
+spring:
+  application:
+    name: audit-ready-student-system
+  
+  datasource:
+    url: jdbc:mysql://localhost:3306/audit_student_db
+    username: root
+    password: Varun_396
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    open-in-view: false
+
+  mvc:
+    throw-exception-if-no-handler-found: true
+  web:
+    resources:
+      add-mappings: true
+
+server:
+  port: 8080
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: never
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha
+    tryItOutEnabled: true
+    filter: true
+  show-actuator: true
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    com.auditready.studentsystem: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/audit-ready-system.log
+
+jwt:
+  secret: studentSystemSecretKey12345__32chars_min
+  expiration: 86400000

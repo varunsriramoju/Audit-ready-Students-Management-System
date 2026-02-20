@@ -1,0 +1,237 @@
+:root {
+    --primary: #4f46e5;
+    --primary-hover: #4338ca;
+    --secondary: #64748b;
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --info: #3b82f6;
+    --bg-main: #f8fafc;
+    --bg-card: #ffffff;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --radius: 12px;
+    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    line-height: 1.5;
+    min-height: 100vh;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Auth Layout */
+.auth-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+}
+
+.auth-card {
+    background: var(--bg-card);
+    padding: 2.5rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    width: 100%;
+    max-width: 400px;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.auth-header h1 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+}
+
+.auth-header p {
+    color: var(--text-muted);
+}
+
+/* Forms */
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fdfdfd;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    width: 100%;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+}
+
+.btn-link {
+    background: transparent;
+    color: var(--primary);
+    margin-top: 1rem;
+    font-size: 0.875rem;
+}
+
+/* Dashboard Layout */
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.navbar {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar-brand {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.main-content {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    flex: 1;
+}
+
+/* Cards */
+.card {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+/* RBAC & Badges */
+.role-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+    background: var(--secondary);
+    color: white;
+}
+
+.role-badge.role_admin {
+    background: var(--danger);
+}
+
+.role-badge.role_lecturer {
+    background: var(--warning);
+}
+
+.role-badge.role_hod {
+    background: var(--info);
+}
+
+.role-badge.role_student {
+    background: var(--success);
+}
+
+.role-badge.role_user {
+    background: var(--secondary);
+}
+
+.rbac-hidden {
+    display: none !important;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .main-content {
+        padding: 1rem;
+    }
+
+    .navbar {
+        padding: 1rem;
+    }
+}

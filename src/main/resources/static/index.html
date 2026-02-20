@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit-Ready Student Management</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Auth Section -->
+    <div id="auth-section" class="auth-container">
+        <div class="auth-card">
+            <div id="login-form-container">
+                <div class="auth-header">
+                    <h1>Welcome Back</h1>
+                    <p>Login to manage your students</p>
+                </div>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="login-username">Username</label>
+                        <input type="text" id="login-username" class="form-control" placeholder="Enter username"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" class="form-control" placeholder="Enter password"
+                            required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Sign In</button>
+                    <button type="button" class="btn btn-link" id="show-register">Don't have an account?
+                        Register</button>
+                </form>
+            </div>
+
+            <div id="register-form-container" class="hidden">
+                <div class="auth-header">
+                    <h1>Create Account</h1>
+                    <p>Start managing your institution</p>
+                </div>
+                <form id="register-form">
+                    <div class="form-group">
+                        <label for="reg-username">Username</label>
+                        <input type="text" id="reg-username" class="form-control" placeholder="Choose username"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-password">Password</label>
+                        <input type="password" id="reg-password" class="form-control" placeholder="Min 6 characters"
+                            required minlength="6">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-email">Email Address</label>
+                        <input type="email" id="reg-email" class="form-control" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-role">Role</label>
+                        <select id="reg-role" class="form-control" required style="background: white;">
+                            <option value="">Select Role</option>
+                            <option value="ADMIN">ADMIN</option>
+                            <option value="STAFF">STAFF</option>
+                            <option value="STUDENT">STUDENT</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create Account</button>
+
+                    <button type="button" class="btn btn-link" id="show-login">Already have an account? Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Section -->
+    <div id="dashboard-section" class="dashboard-container hidden">
+        <nav class="navbar">
+            <div class="navbar-brand">StudentManager Pro</div>
+            <div class="navbar-user">
+                <span id="user-display" style="margin-right: 1rem; font-weight: 500;"></span>
+                <span id="role-badge" class="role-badge" style="margin-right: 1rem;"></span>
+                <button id="logout-btn" class="btn btn-primary"
+                    style="width: auto; padding: 0.5rem 1rem;">Logout</button>
+            </div>
+
+        </nav>
+
+        <main class="main-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Student Records</h2>
+                    <button id="add-student-btn" class="btn btn-primary" style="width: auto;"
+                        data-role="ROLE_ADMIN,ROLE_LECTURER,ROLE_HOD"> + New Student</button>
+                </div>
+
+
+                <div class="search-bar" style="margin-bottom: 2rem; display: flex; gap: 1rem;">
+                    <input type="text" id="search-input" class="form-control" placeholder="Search by name or email...">
+                </div>
+
+                <div id="students-list">
+                    <!-- Dynamic Student Cards will be injected here -->
+                </div>
+
+                <div id="pagination" style="margin-top: 2rem; display: flex; justify-content: center; gap: 0.5rem;">
+                    <!-- Pagination buttons -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Student Modal -->
+    <div id="student-modal" class="auth-container hidden"
+        style="position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; background: rgba(0,0,0,0.5);">
+        <div class="auth-card" style="max-width: 600px;">
+            <div class="auth-header">
+                <h1 id="modal-title">Add Student</h1>
+            </div>
+            <form id="student-form">
+                <input type="hidden" id="student-id">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label for="std-name">Full Name</label>
+                        <input type="text" id="std-name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="std-email">Email Address</label>
+                        <input type="email" id="std-email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="std-phone">Phone Number</label>
+                        <input type="text" id="std-phone" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="std-dept">Department</label>
+                        <input type="text" id="std-dept" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="std-year">Academic Year</label>
+                        <input type="number" id="std-year" class="form-control" min="1" max="10" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="std-cgpa">CGPA</label>
+                        <input type="number" id="std-cgpa" class="form-control" step="0.01" min="0" max="10">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="std-address">Address</label>
+                    <input type="text" id="std-address" class="form-control">
+                </div>
+                <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="button" id="close-modal" class="btn btn-secondary"
+                        style="background: var(--secondary); color: white;">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>
