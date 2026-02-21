@@ -61,6 +61,10 @@ const api = {
             return api.request(url);
         },
         myProfile: () => api.request('/students/my-profile')
+    },
+    audit: {
+        getLogs: () => api.request('/audit/logs'),
+        getStudentLogs: (id) => api.request(`/audit/student/${id}`)
     }
 };
 

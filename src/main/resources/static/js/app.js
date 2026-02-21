@@ -28,6 +28,11 @@ const app = {
                 this.loadStudents();
             }, 500);
         });
+        // View Switching
+        document.getElementById('view-records-btn').addEventListener('click', () => this.switchView('records'));
+        document.getElementById('view-audit-btn').addEventListener('click', () => this.switchView('audit'));
+        document.getElementById('refresh-audit-btn').addEventListener('click', () => this.loadAuditLogs());
+        document.getElementById('close-audit-modal').addEventListener('click', () => this.hideAuditModal());
     },
 
     async loadStudents() {
@@ -88,10 +93,11 @@ const app = {
                             <td style="padding: 1rem;">${s.department}</td>
                             <td style="padding: 1rem;">${s.year}</td>
                             <td style="padding: 1rem;"><span style="background: var(--info); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem;">${s.cgpa || 'N/A'}</span></td>
-                            <td style="padding: 1rem; text-align: right;">
-                                <button onclick="app.editStudent(${s.id})" class="btn btn-secondary" style="width: auto; padding: 0.25rem 0.75rem; font-size: 0.75rem; margin-right: 0.5rem; background: var(--secondary); color: white;" data-role="ROLE_ADMIN,ROLE_LECTURER,ROLE_HOD">Edit</button>
-                                <button onclick="app.deleteStudent(${s.id})" class="btn btn-danger" style="width: auto; padding: 0.25rem 0.75rem; font-size: 0.75rem; background: var(--danger); color: white;" data-role="ROLE_ADMIN">Delete</button>
-                            </td>
+                             <td style="padding: 1rem; text-align: right;">
+                                 <button onclick="app.editStudent(${s.id})" class="btn btn-secondary" style="width: auto; padding: 0.25rem 0.75rem; font-size: 0.75rem; margin-right: 0.5rem; background: var(--secondary); color: white;" data-role="ADMIN,STAFF">Edit</button>
+                                 <button onclick="app.showStudentAudit(${s.id}, '${s.name}')" class="btn btn-info" style="width: auto; padding: 0.25rem 0.75rem; font-size: 0.75rem; margin-right: 0.5rem; background: var(--info); color: white;" data-role="ADMIN,STAFF">Audit</button>
+                                 <button onclick="app.deleteStudent(${s.id})" class="btn btn-danger" style="width: auto; padding: 0.25rem 0.75rem; font-size: 0.75rem; background: var(--danger); color: white;" data-role="ADMIN">Delete</button>
+                             </td>
 
                         </tr>
                     `).join('')}
@@ -136,6 +142,12 @@ const app = {
             document.getElementById('std-cgpa').value = student.cgpa || '';
             document.getElementById('std-address').value = student.address || '';
         }
+
+        const role = localStorage.getItem('role');
+        const isStaff = role === 'STAFF';
+
+        // Disable sensitive fields for staff
+        document.getElementById('std-email').disabled = isStaff;
 
         modal.classList.remove('hidden');
     },
@@ -187,6 +199,95 @@ const app = {
         } catch (error) {
             alert(error.message);
         }
+    },
+
+    switchView(view) {
+        const recordsView = document.getElementById('students-list').parentElement;
+        const auditView = document.getElementById('audit-section');
+        const recordsBtn = document.getElementById('view-records-btn');
+        const auditBtn = document.getElementById('view-audit-btn');
+
+        if (view === 'records') {
+            recordsView.classList.remove('hidden');
+            auditView.classList.add('hidden');
+            recordsBtn.style.color = 'var(--primary)';
+            recordsBtn.style.fontWeight = '700';
+            auditBtn.style.color = 'var(--text-muted)';
+            auditBtn.style.fontWeight = '400';
+        } else {
+            recordsView.classList.add('hidden');
+            auditView.classList.remove('hidden');
+            recordsBtn.style.color = 'var(--text-muted)';
+            recordsBtn.style.fontWeight = '400';
+            auditBtn.style.color = 'var(--primary)';
+            auditBtn.style.fontWeight = '700';
+            this.loadAuditLogs();
+        }
+    },
+
+    async loadAuditLogs() {
+        try {
+            const container = document.getElementById('audit-list');
+            container.innerHTML = '<div style="text-align: center; padding: 2rem;">Loading logs...</div>';
+
+            const result = await api.audit.getLogs();
+            this.renderAuditLogs(result.data, 'audit-list');
+        } catch (error) {
+            console.error('Failed to load logs', error);
+            document.getElementById('audit-list').innerHTML = `<div class="error-msg">${error.message}</div>`;
+        }
+    },
+
+    async showStudentAudit(id, name) {
+        try {
+            document.getElementById('audit-modal-title').textContent = `Audit History: ${name}`;
+            const container = document.getElementById('student-audit-list');
+            container.innerHTML = '<div style="text-align: center; padding: 2rem;">Loading history...</div>';
+            document.getElementById('student-audit-modal').classList.remove('hidden');
+
+            const result = await api.audit.getStudentLogs(id);
+            this.renderAuditLogs(result.data, 'student-audit-list');
+        } catch (error) {
+            alert('Failed to load audit history: ' + error.message);
+        }
+    },
+
+    hideAuditModal() {
+        document.getElementById('student-audit-modal').classList.add('hidden');
+    },
+
+    renderAuditLogs(logs, containerId) {
+        const container = document.getElementById(containerId);
+        if (logs.length === 0) {
+            container.innerHTML = '<div style="text-align: center; padding: 2rem; color: var(--text-muted);">No audit logs found.</div>';
+            return;
+        }
+
+        container.innerHTML = `
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="text-align: left; border-bottom: 2px solid var(--border);">
+                        <th style="padding: 1rem;">Time</th>
+                        <th style="padding: 1rem;">Action</th>
+                        <th style="padding: 1rem;">User</th>
+                        <th style="padding: 1rem;">Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${logs.map(log => `
+                        <tr style="border-bottom: 1px solid var(--border);">
+                            <td style="padding: 1rem; font-size: 0.85rem; color: var(--text-muted);">${new Date(log.changedAt).toLocaleString()}</td>
+                            <td style="padding: 1rem;"><span class="role-badge ${log.action.toLowerCase()}">${log.action}</span></td>
+                            <td style="padding: 1rem; font-weight: 500;">${log.changedBy}</td>
+                            <td style="padding: 1rem;">
+                                <div style="font-size: 0.9rem; font-weight: 600; color: var(--primary);">${log.entityName} #${log.entityId}</div>
+                                <div style="font-size: 0.85rem; margin-top: 0.25rem;">${log.diff}</div>
+                            </td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        `;
     }
 };
 

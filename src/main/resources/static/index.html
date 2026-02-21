@@ -78,6 +78,12 @@
     <div id="dashboard-section" class="dashboard-container hidden">
         <nav class="navbar">
             <div class="navbar-brand">StudentManager Pro</div>
+            <div style="display: flex; gap: 1rem; margin-right: 2rem;">
+                <button id="view-records-btn" class="btn btn-link"
+                    style="margin: 0; width: auto; font-weight: 700; color: var(--primary);">Records</button>
+                <button id="view-audit-btn" class="btn btn-link"
+                    style="margin: 0; width: auto; color: var(--text-muted);">Audit History</button>
+            </div>
             <div class="navbar-user">
                 <span id="user-display" style="margin-right: 1rem; font-weight: 500;"></span>
                 <span id="role-badge" class="role-badge" style="margin-right: 1rem;"></span>
@@ -91,8 +97,8 @@
             <div class="card">
                 <div class="card-header">
                     <h2>Student Records</h2>
-                    <button id="add-student-btn" class="btn btn-primary" style="width: auto;"
-                        data-role="ROLE_ADMIN,ROLE_LECTURER,ROLE_HOD"> + New Student</button>
+                    <button id="add-student-btn" class="btn btn-primary" style="width: auto;" data-role="ADMIN"> + New
+                        Student</button>
                 </div>
 
 
@@ -108,7 +114,32 @@
                     <!-- Pagination buttons -->
                 </div>
             </div>
+
+            <div id="audit-section" class="card hidden">
+                <div class="card-header">
+                    <h2>System Audit History</h2>
+                    <button id="refresh-audit-btn" class="btn btn-secondary" style="width: auto;">Refresh Logs</button>
+                </div>
+                <div id="audit-list" class="audit-timeline">
+                    <!-- Audit logs will be injected here -->
+                </div>
+            </div>
         </main>
+    </div>
+
+    <!-- Student Audit History Modal -->
+    <div id="student-audit-modal" class="auth-container hidden"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1001; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center;">
+        <div class="auth-card" style="max-width: 800px; width: 90%; max-height: 80vh; overflow-y: auto;">
+            <div class="card-header"
+                style="position: sticky; top: 0; background: white; z-index: 10; padding-bottom: 1rem;">
+                <h2 id="audit-modal-title">Student Audit History</h2>
+                <button id="close-audit-modal" class="btn btn-secondary" style="width: auto;">Close</button>
+            </div>
+            <div id="student-audit-list" class="audit-timeline" style="margin-top: 1rem;">
+                <!-- Student audit logs will be injected here -->
+            </div>
+        </div>
     </div>
 
     <!-- Student Modal -->

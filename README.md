@@ -7,6 +7,12 @@ A production-grade, audit-ready Student Management System featuring a clean laye
 ![Spring Boot](https://img.shields.io/badge/Spring--Boot-3.1.5-green)
 ![Aesthetics](https://img.shields.io/badge/UI-Premium--Minimalism-purple)
 
+## 📸 Visual Overview
+
+| Admin Dashboard | Staff View | Student Profile | Audit History |
+| :---: | :---: | :---: | :---: |
+| ![Admin](assets/admin_dashboard.png) | ![Staff](assets/staff_dashboard.png) | ![Student](assets/student_dashboard.png) | ![Audit](assets/admin_audit_ss.png) |
+
 ## 🌟 Key Features
 
 - **Professional UI**: Sleek, card-based dashboard with smooth transitions and micro-animations.

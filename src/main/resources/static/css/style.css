@@ -188,24 +188,28 @@ body {
     color: white;
 }
 
-.role-badge.role_admin {
+.role-badge.admin {
     background: var(--danger);
 }
 
-.role-badge.role_lecturer {
+.role-badge.staff {
     background: var(--warning);
 }
 
-.role-badge.role_hod {
-    background: var(--info);
-}
-
-.role-badge.role_student {
+.role-badge.student {
     background: var(--success);
 }
 
-.role-badge.role_user {
-    background: var(--secondary);
+.role-badge.create {
+    background: var(--success);
+}
+
+.role-badge.update {
+    background: var(--info);
+}
+
+.role-badge.delete {
+    background: var(--danger);
 }
 
 .rbac-hidden {

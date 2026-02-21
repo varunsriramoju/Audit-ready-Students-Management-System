@@ -25,6 +25,7 @@ public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studentRepository;
     private final StudentMapper studentMapper;
+    private final com.auditready.studentsystem.service.AuditService auditService;
 
     @Override
     public List<StudentDto> getAllStudents() {
@@ -56,6 +57,9 @@ public class StudentServiceImpl implements StudentService {
         log.info("Creating new student: {}", studentDto.name());
         Student student = studentMapper.toEntity(studentDto);
         Student savedStudent = studentRepository.save(student);
+
+        auditService.logCreate("STUDENT", savedStudent.getId(), savedStudent);
+
         return studentMapper.toDto(savedStudent);
     }
 
@@ -65,6 +69,17 @@ public class StudentServiceImpl implements StudentService {
         log.info("Updating student with id: {}", id);
         Student existingStudent = studentRepository.findById(id)
                 .orElseThrow(() -> new StudentNotFoundException("Student not found with id: " + id));
+
+        // Create a copy for auditing
+        Student oldStudent = Student.builder()
+                .name(existingStudent.getName())
+                .email(existingStudent.getEmail())
+                .phone(existingStudent.getPhone())
+                .department(existingStudent.getDepartment())
+                .year(existingStudent.getYear())
+                .address(existingStudent.getAddress())
+                .cgpa(existingStudent.getCgpa())
+                .build();
 
         // updating fields
         existingStudent.setName(studentDto.name());
@@ -76,6 +91,9 @@ public class StudentServiceImpl implements StudentService {
         existingStudent.setCgpa(studentDto.cgpa());
 
         Student updatedStudent = studentRepository.save(existingStudent);
+
+        auditService.logUpdate("STUDENT", id, oldStudent, updatedStudent);
+
         return studentMapper.toDto(updatedStudent);
     }
 
@@ -83,9 +101,11 @@ public class StudentServiceImpl implements StudentService {
     @Transactional
     public void deleteStudent(Long id) {
         log.info("Deleting student with id: {}", id);
-        if (!studentRepository.existsById(id)) {
-            throw new StudentNotFoundException("Student not found with id: " + id);
-        }
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() -> new StudentNotFoundException("Student not found with id: " + id));
+
+        auditService.logDelete("STUDENT", id, student);
+
         studentRepository.deleteById(id);
     }
 
